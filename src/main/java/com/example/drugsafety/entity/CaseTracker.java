@@ -45,7 +45,7 @@ public class CaseTracker implements Serializable {
 
     public static final int MIN_PRIORITY = 0;
     public static final int MAX_PRIORITY = 99999;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; 
 
     @Id
     @Basic(optional = false)
