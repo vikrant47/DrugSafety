@@ -12,8 +12,8 @@ import java.util.Date;
  *
  */
 @Entity
-@Table(name = "role_task_assignment_order")
-public class RoleTaskAssignmentOrder implements Serializable {
+@Table(name = "task_state")
+public class TaskState implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String id;
@@ -27,7 +27,7 @@ public class RoleTaskAssignmentOrder implements Serializable {
     private String updatedBy;
     private Role role;
 
-    public RoleTaskAssignmentOrder() {
+    public TaskState() {
     }
 
     @Id

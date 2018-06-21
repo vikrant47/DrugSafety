@@ -14,16 +14,16 @@ import com.example.drugsafety.service.UserService;
 @Scope("session")
 public class SessionComponent {
 
-	private User user;
-	@Autowired
-	private UserService userService;
+    private User user;
+    @Autowired
+    private UserService userService;
 
-	public User getCurrentUser() {
-		if (this.user == null) {
-			this.user = userService.findByUsername(
-					((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName()
-					);
-		}
-		return this.user;
-	}
+    public User getCurrentUser() {
+        if (this.user == null) {
+            this.user = userService.findByUsername(
+                    ((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName()
+            );
+        }
+        return this.user;
+    }
 }

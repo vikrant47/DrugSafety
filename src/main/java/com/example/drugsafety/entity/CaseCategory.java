@@ -5,7 +5,10 @@
  */
 package com.example.drugsafety.entity;
 
+import com.example.drugsafety.entity.acl.Role;
 import com.example.drugsafety.entity.acl.User;
+import com.example.drugsafety.model.DurationUnit;
+import com.example.drugsafety.model.task.TaskStateRecord;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -42,35 +45,53 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "CaseCategory.findByActive", query = "SELECT c FROM CaseCategory c WHERE c.active = :active")
     , @NamedQuery(name = "CaseCategory.findByCreatedAt", query = "SELECT c FROM CaseCategory c WHERE c.createdAt = :createdAt")
     , @NamedQuery(name = "CaseCategory.findByUpdatedAt", query = "SELECT c FROM CaseCategory c WHERE c.updatedAt = :updatedAt")})
-public class CaseCategory implements Serializable {
+public class CaseCategory implements TaskStateRecord, Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    
+    
     @Column(name = "id")
     private String id;
-    @Size(max = 45)
+    
+    
     @Column(name = "name")
     private String name;
+    
     @Basic(optional = false)
-    @NotNull
+    
     @Column(name = "priority")
     private int priority;
+
+    @Basic(optional = false)
+    
+    @Column(name = "tat_duration")
+    private double tatDuration;
+
+    @Basic(optional = false)
+    
+    @Column(name = "tat_duration_unit", length = 45)
+    private String tatDurationUnit = DurationUnit.HOUR;
+
     @Column(name = "active")
     private Boolean active;
+    
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    
     @OneToMany(mappedBy = "caseCategory", fetch = FetchType.LAZY)
     private Set<CaseTracker> caseTrackers;
+    
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User createdBy;
+    
     @JoinColumn(name = "updated_by", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User updatedBy;
@@ -109,6 +130,22 @@ public class CaseCategory implements Serializable {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public double getTatDuration() {
+        return tatDuration;
+    }
+
+    public void setTatDuration(double tatDuration) {
+        this.tatDuration = tatDuration;
+    }
+
+    public String getTatDurationUnit() {
+        return tatDurationUnit;
+    }
+
+    public void setTatDurationUnit(String tatDurationUnit) {
+        this.tatDurationUnit = tatDurationUnit;
     }
 
     public Boolean getActive() {
@@ -184,5 +221,5 @@ public class CaseCategory implements Serializable {
     public String toString() {
         return "com.example.drugsafety.entity.CaseCategory[ id=" + id + " ]";
     }
-    
+
 }

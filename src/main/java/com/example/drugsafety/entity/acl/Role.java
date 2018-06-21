@@ -12,51 +12,52 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "role")
 public class Role {
-	public static final String ADMIN = "ADMIN";
-	public static final String DEVELOPER = "DEVELOPER";
-	public static final String CASE_DOCTOR = "CASE_DOCTOR";
-	public static final String CASE_USER = "CASE_USER";
 
-	private long id;
-	private String name;
-	private Set<User> users;
-	private String slug;
+    public static final String ADMIN = "ADMIN";
+    public static final String DEVELOPER = "DEVELOPER";
+    public static final String CASE_DOCTOR = "CASE_DOCTOR";
+    public static final String CASE_USER = "CASE_USER";
 
-	@Id
-	@GeneratedValue()
-	public long getId() {
-		return id;
-	}
+    private long id;
+    private String name;
+    private Set<User> users;
+    private String slug;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Id
+    @GeneratedValue()
+    public long getId() {
+        return id;
+    }
 
-	@Column(name = "role_name", nullable = true)
-	public String getName() {
-		return name;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Column(name = "role_name", nullable = true)
+    public String getName() {
+        return name;
+    }
 
-	@ManyToMany(mappedBy = "roles")
-	public Set<User> getUsers() {
-		return this.users;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
+    @ManyToMany(mappedBy = "roles")
+    public Set<User> getUsers() {
+        return this.users;
+    }
 
-	@Column(name = "slug", nullable = true)
-	public String getSlug() {
-		return slug;
-	}
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
 
-	public void setSlug(String slug) {
-		this.slug = slug;
-	}
+    @Column(name = "slug", nullable = true)
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
 
 }

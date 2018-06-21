@@ -4,6 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.example.drugsafety.entity.CaseCategory</class>
     <class>com.example.drugsafety.entity.CaseTracker</class>
+    <class>com.example.drugsafety.entity.acl.Setting</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/drugsafety"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

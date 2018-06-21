@@ -13,11 +13,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "user")
+@NamedQueries({
+    @NamedQuery(name = "User.getTaskRole", query = "SELECT c FROM User c")})
 public class User {
 
     private String id;

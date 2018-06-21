@@ -6,6 +6,8 @@
 package com.example.drugsafety.entity;
 
 import com.example.drugsafety.entity.acl.User;
+import com.example.drugsafety.model.task.TaskRecord;
+import com.example.drugsafety.model.task.TaskStateRecord;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -20,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,21 +43,23 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "CaseTracker.findByUpdatedAt", query = "SELECT c FROM CaseTracker c WHERE c.updatedAt = :updatedAt")
     , @NamedQuery(name = "CaseTracker.findByStatus", query = "SELECT c FROM CaseTracker c WHERE c.status = :status")
     , @NamedQuery(name = "CaseTracker.findByStartedAt", query = "SELECT c FROM CaseTracker c WHERE c.startedAt = :startedAt")
-    , @NamedQuery(name = "CaseTracker.findByCasePriority", query = "SELECT c FROM CaseTracker c WHERE c.casePriority = :casePriority")})
-public class CaseTracker implements Serializable {
+    , @NamedQuery(name = "CaseTracker.findByCaseCategory", query = "SELECT c FROM CaseTracker c WHERE c.caseCategory = :caseCategory")
+    , @NamedQuery(name = "CaseTracker.findPendingCaseOrderByPriority", query = "SELECT c FROM CaseTracker c WHERE c.startedAt IS NULL ORDER BY c.priority DESC")
+})
+public class CaseTracker implements TaskRecord, Serializable {
 
     public static final int MIN_PRIORITY = 0;
     public static final int MAX_PRIORITY = 99999;
-    private static final long serialVersionUID = 1L; 
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    
+    
     @Column(name = "id")
     private String id;
 
-    @Size(max = 255)
+    
     @Column(name = "csae_number")
     private String csaeNumber;
 
@@ -69,7 +74,7 @@ public class CaseTracker implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @Size(max = 45)
+    
     @Column(name = "status")
     private String status;
 
@@ -83,6 +88,10 @@ public class CaseTracker implements Serializable {
     @JoinColumn(name = "case_category_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private CaseCategory caseCategory;
+    
+   @JoinColumn(name = "task_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Task task;
 
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -212,9 +221,23 @@ public class CaseTracker implements Serializable {
         return true;
     }
 
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
     @Override
     public String toString() {
         return "com.example.drugsafety.entity.CaseTracker[ id=" + id + " ]";
+    }
+
+    
+    @Override
+    public TaskStateRecord getTaskStateRecord() {
+        return this.getCaseCategory();
     }
 
 }

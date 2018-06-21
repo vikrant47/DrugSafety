@@ -3,101 +3,131 @@ package com.example.drugsafety.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.example.drugsafety.entity.acl.Role;
 import com.example.drugsafety.entity.acl.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The persistent class for the role_task_assignment_order database table.
- * 
+ *
  */
 /**
  * @author SS
  *
  */
 @Entity
-@Table(name = "role_task_assignment_order") 
+@Table(name = "task_transition")
 public class TaskTransition implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private String id;
 
-	private Date processedAt;
-	private String fromState;
-	private String toState;
-	private User processedBy;
-	private Task task;
-	private String remarks;
+    private static final long serialVersionUID = 1L;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private String id;
 
-	public TaskTransition() {
-	}
+    private Date processedAt;
+    private TaskState fromState;
+    private TaskState toState;
+    private User processedBy;
+    private Task task;
+    private String remarks;
+    private String changesDone;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false, length = 45)
-	public String getId() {
-		return this.id;
-	}
+    public TaskTransition() {
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true, nullable = false, length = 45)
+    public String getId() {
+        return this.id;
+    }
 
-	@Column(name = "from_state", nullable = false, length = 255)
-	public String getFromState() {
-		return this.fromState;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setFromState(String fromState) {
-		this.fromState = fromState;
-	}
+    @ManyToOne
+    @JoinColumn(name = "from_state", nullable = false)
+    public TaskState getFromState() {
+        return this.fromState;
+    }
 
-	@Column(name = "to_state", nullable = false, length = 45)
-	public String getToState() {
-		return this.toState;
-	}
+    public void setFromState(TaskState fromState) {
+        this.fromState = fromState;
+    }
 
-	public void setToState(String toState) {
-		this.toState = toState;
-	}
+    @ManyToOne
+    @JoinColumn(name = "to_state", nullable = false)
+    public TaskState getToState() {
+        return this.toState;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_at")
-	public Date getProcessedAt() {
-		return processedAt;
-	}
+    public void setToState(TaskState toState) {
+        this.toState = toState;
+    }
 
-	public void setProcessedAt(Date processedAt) {
-		this.processedAt = processedAt;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    public Date getProcessedAt() {
+        return processedAt;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "processed_by", nullable = false)
-	public User getProcessedBy() {
-		return processedBy;
-	}
+    public void setProcessedAt(Date processedAt) {
+        this.processedAt = processedAt;
+    }
 
-	public void setProcessedBy(User processedBy) {
-		this.processedBy = processedBy;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "processed_by", nullable = false)
+    public User getProcessedBy() {
+        return processedBy;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "task_id", nullable = false)
-	public Task getTask() {
-		return task;
-	}
+    public void setProcessedBy(User processedBy) {
+        this.processedBy = processedBy;
+    }
 
-	public void setTask(Task task) {
-		this.task = task;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id", nullable = false)
+    public Task getTask() {
+        return task;
+    }
 
-	@Column(name = "remarks")
-	public String getRemarks() {
-		return remarks;
-	}
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
+    @Column(name = "remarks")
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    @Column(name = "changes_done")
+    public HashMap<String, Object[]> getChangesDone() {
+        try {
+            return objectMapper.readValue(changesDone, new TypeReference<HashMap<String, Object[]>>() {
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(TaskTransition.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void setChangesDone(HashMap<String, Object[]> changesDone) {
+        try {
+            this.changesDone = objectMapper.writeValueAsString(changesDone);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(TaskTransition.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

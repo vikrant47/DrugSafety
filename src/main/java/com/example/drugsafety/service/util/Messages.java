@@ -11,22 +11,22 @@ import java.util.Locale;
 @Component
 public class Messages {
 
-	@Autowired
-	private MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-	private MessageSourceAccessor accessor;
+    private MessageSourceAccessor accessor;
 
-	@PostConstruct
-	private void init() {
-		accessor = new MessageSourceAccessor(messageSource, Locale.ENGLISH);
-	}
+    @PostConstruct
+    private void init() {
+        accessor = new MessageSourceAccessor(messageSource, Locale.ENGLISH);
+    }
 
-	public String get(String code) {
-		try {
-			return accessor.getMessage(code);
-		} catch (Exception ex) {
-			return code;
-		}
-	}
+    public String get(String code) {
+        try {
+            return accessor.getMessage(code);
+        } catch (Exception ex) {
+            return code;
+        }
+    }
 
 }
